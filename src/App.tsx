@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { TasksProvider } from "./services/provider/TasksProvider";
+import { UsersProvider } from "./services/provider/UsersProvider";
+import {
+  Navigate,
+  Route,
+  RouterProvider,
+  Routes,
+  createBrowserRouter,
+} from "react-router-dom";
+import NavBar from "./components/NavBar";
+import { AuthProvider } from "./services/provider/AuthProvider";
+import RouteGuard from "./services/auth/RouteGuard";
+import { Paths, getPathRoute } from "./services/Paths";
+
+const router = createBrowserRouter([{ path: "*", Component: Root }]);
+
+function Root() {
+  return (
+    <UsersProvider>
+      <AuthProvider>
+        <TasksProvider>
+          <NavBar></NavBar>
+          <Routes>
+            <Route element={<RouteGuard></RouteGuard>}>
+              {getPathRoute(Paths.taskView)}
+              {getPathRoute(Paths.taskManager)}
+              {getPathRoute(Paths.addUser)}
+              {getPathRoute(Paths.userView)}
+              <Route
+                path="/"
+                element={<Navigate to={Paths.taskView.path}></Navigate>}
+              ></Route>
+            </Route>
+
+            {getPathRoute(Paths.login)}
+            <Route
+              path="/"
+              element={<Navigate to={Paths.login.path}></Navigate>}
+            ></Route>
+          </Routes>
+        </TasksProvider>
+      </AuthProvider>
+    </UsersProvider>
+  );
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
