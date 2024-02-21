@@ -27,6 +27,9 @@ function UserView() {
       notifyWarn("Uno o più campi vuoti");
       return;
     }
+    const resetField=()=>{
+      (document.getElementById("newPassword")as HTMLInputElement).value="";
+    }
 
     users.dispatch({
       type: UserActionType.EDIT,
@@ -40,6 +43,7 @@ function UserView() {
     });
 
     notifySucces("Password modificata");
+    resetField();
   }
 
   return (

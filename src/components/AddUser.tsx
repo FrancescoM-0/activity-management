@@ -25,6 +25,7 @@ function AddUser() {
   if (users.users === null) {
     return <></>;
   }
+  
 
   function handleClick(): void {
     const name: string = (document.getElementById("name") as HTMLInputElement)
@@ -39,6 +40,12 @@ function AddUser() {
       return;
     }
 
+    const resetField=()=>{
+      (document.getElementById("name")as HTMLInputElement).value="";
+      (document.getElementById("email")as HTMLInputElement).value="";
+      (document.getElementById("role")as HTMLInputElement).value="";
+     }
+
     users.dispatch({
       type: UserActionType.ADD,
       user: new User(
@@ -51,6 +58,7 @@ function AddUser() {
     });
 
     notifySucces("Utente aggiunto");
+    resetField();
   }
 
   return (
