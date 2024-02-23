@@ -23,24 +23,10 @@ function TaskManager() {
         onStatusFilterChange={setStatusFilter}
         onUserFilterChange={setUserFilter}
       ></SearchBar>
-      <button
-        onClick={() => {
-          dispatch(undoTasks());
-        }}
-      >
-        undo
-      </button>
-      <button
-        onClick={() => {
-          dispatch(redoTasks());
-        }}
-      >
-        redo
-      </button>
       <TMUserList onUserFilterChange={setUserFilter}></TMUserList>
       <div style={{textAlign:"right",marginTop:"-5rem",marginRight:"1rem"}}>
-      <Fab sx={{marginRight:"1rem"}} onClick={()=>null}><UndoIcon/></Fab>
-      <Fab onClick={()=>null}><RedoIcon/></Fab>
+      <Fab sx={{marginRight:"1rem"}} onClick={()=>{dispatch(undoTasks())}}><UndoIcon/></Fab>
+      <Fab onClick={()=>{dispatch(redoTasks())}}><RedoIcon/></Fab>
       </div>
       <TMTaskList
         userFilter={userFilter}
