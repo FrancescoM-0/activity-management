@@ -1,8 +1,8 @@
-import { IAuthUserState } from "../../types/providers-types/AuthProviderTypes";
+import User from "../../types/User";
 
 const cacheUserName: string = "activity-management-UserCache";
 
-function writeCacheUser(userData: IAuthUserState): void {
+function writeCacheUser(userData: User | null): void {
   localStorage[cacheUserName] = JSON.stringify(userData);
 }
 

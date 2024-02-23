@@ -5,6 +5,8 @@ import User from "../types/User";
 import { selectTasks } from "./reducers/tasksSlice";
 import Task from "../types/Task";
 
+//TODO hooks per users e tasks
+
 const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 const useAppSelector = useSelector.withTypes<RootState>();
 

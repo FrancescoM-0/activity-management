@@ -19,6 +19,8 @@ import dayjs from "dayjs";
 import { editTask } from "../../redux/reducers/tasksSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
+//TODO singolo dispatch
+
 interface TMEditedTaskProps {
   task: Task;
   statusKey: string | undefined;
