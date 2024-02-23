@@ -1,5 +1,5 @@
 import {
-  Button,
+  Fab,
   FormControl,
   InputLabel,
   MenuItem,
@@ -18,8 +18,10 @@ import User from "../../types/User";
 import dayjs from "dayjs";
 import { editTask } from "../../redux/reducers/tasksSlice";
 import { useAppDispatch } from "../../redux/hooks";
+import SaveIcon from '@mui/icons-material/Save';
+import Save from "@mui/icons-material/Save";
 
-//TODO singolo dispatch
+
 
 interface TMEditedTaskProps {
   task: Task;
@@ -109,7 +111,7 @@ function TMEditedTask({
           }}
         />
       </LocalizationProvider>
-      <Button onClick={() => setIsEditing(!isEditing)}>Save</Button>
+      <Fab sx={{marginLeft:"1rem"}} onClick={() => setIsEditing(!isEditing)}><Save/></Fab>
     </ItemTMTask>
   );
 }
