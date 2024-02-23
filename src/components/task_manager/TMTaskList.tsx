@@ -41,7 +41,9 @@ function TMTaskList({ userFilter, textFilter, statusFilter }: TMTaskListProps) {
         marginTop={"-1rem"}
       >
         {tasksJsx}
-        {addTask && <TMAddTask newTaskId={tasks.length + 1}></TMAddTask>}
+        {addTask && (
+          <TMAddTask newTaskId={tasks[tasks.length - 1].id + 1}></TMAddTask>
+        )}
       </Stack>
       <div
         style={{
