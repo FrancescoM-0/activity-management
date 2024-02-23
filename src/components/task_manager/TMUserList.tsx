@@ -9,10 +9,10 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useUsers } from "../../services/provider/UsersProvider";
 import TMUser from "./TMUser";
 import User from "../../types/User";
-import { IUserContext } from "../../types/providers-types/UsersProviderTypes";
+import { useAppSelector } from "../../redux/hooks";
+import { selectUsers } from "../../redux/reducers/usersSlice";
 
 interface TMUserListProps {
   onUserFilterChange: (user: string) => void;
@@ -21,13 +21,9 @@ interface TMUserListProps {
 function TMUserList({ onUserFilterChange }: TMUserListProps) {
   const theme: Theme = useTheme();
   const isMobile: boolean = useMediaQuery(theme.breakpoints.down("sm"));
-  const users: IUserContext = useUsers();
+  const users = useAppSelector(selectUsers);
 
-  if (users.users === null) {
-    return <></>;
-  }
-
-  let usersJsx: JSX.Element[] = users.users.map((user: User) => {
+  let usersJsx: JSX.Element[] = users.map((user: User) => {
     return (
       <TMUser
         user={user}
@@ -38,10 +34,10 @@ function TMUserList({ onUserFilterChange }: TMUserListProps) {
   });
 
   let usersOptions: JSX.Element[] = [];
-  for (let i = 0; i < users.users.length; i++) {
+  for (let i = 0; i < users.length; i++) {
     usersOptions.push(
-      <MenuItem key={users.users[i].id} value={users.users[i].name}>
-        {users.users[i].name}
+      <MenuItem key={users[i].id} value={users[i].name}>
+        {users[i].name}
       </MenuItem>
     );
   }

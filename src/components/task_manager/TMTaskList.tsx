@@ -1,14 +1,12 @@
-import { useTasks } from "../../services/provider/TasksProvider";
 import { Fab, Stack } from "@mui/material";
-import { useUsers } from "../../services/provider/UsersProvider";
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import TMTask from "./TMTask";
 import TMAddTask from "./TMAddTask";
 import Task from "../../types/Task";
-import { ITaskContext } from "../../types/providers-types/TasksProviderTypes";
-import { IUserContext } from "../../types/providers-types/UsersProviderTypes";
+import { useAppSelector } from "../../redux/hooks";
+import { selectTasks } from "../../redux/reducers/tasksSlice";
 
 interface TMTaskListProps {
   userFilter: string;
@@ -17,15 +15,10 @@ interface TMTaskListProps {
 }
 
 function TMTaskList({ userFilter, textFilter, statusFilter }: TMTaskListProps) {
-  const tasks: ITaskContext = useTasks();
-  const users: IUserContext = useUsers();
   const [addTask, setAddTask] = useState<boolean>(false);
+  const tasks = useAppSelector(selectTasks);
 
-  if (tasks.tasks === null || users.users === null) {
-    return <></>;
-  }
-
-  let tasksJsx = tasks.tasks
+  let tasksJsx = tasks
     .filter((task: Task) => {
       if (
         task.assignedTo.toLowerCase().indexOf(userFilter.toLowerCase()) !==
@@ -48,7 +41,7 @@ function TMTaskList({ userFilter, textFilter, statusFilter }: TMTaskListProps) {
         marginTop={"-1rem"}
       >
         {tasksJsx}
-        {addTask && <TMAddTask newTaskId={tasks.tasks.length + 1}></TMAddTask>}
+        {addTask && <TMAddTask newTaskId={tasks.length + 1}></TMAddTask>}
       </Stack>
       <div
         style={{

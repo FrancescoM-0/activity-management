@@ -12,18 +12,15 @@ import { ItemTMTask } from "../../style/style";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import Task from "../../types/Task";
 import { Dispatch } from "react";
-import {
-  ITaskAction,
-  TaskActionType,
-} from "../../types/providers-types/TasksProviderTypes";
 import Status from "../../types/Status";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import User from "../../types/User";
 import dayjs from "dayjs";
+import { editTask } from "../../redux/reducers/tasksSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 interface TMEditedTaskProps {
   task: Task;
-  dispatch: Dispatch<ITaskAction>;
   statusKey: string | undefined;
   users: User[];
   isEditing: boolean;
@@ -32,12 +29,13 @@ interface TMEditedTaskProps {
 
 function TMEditedTask({
   task,
-  dispatch,
   statusKey,
   users,
   isEditing,
   setIsEditing,
 }: TMEditedTaskProps) {
+  const dispatch = useAppDispatch();
+
   let editedTask: Task = new Task(
     task.id,
     task.title,
@@ -69,10 +67,7 @@ function TMEditedTask({
         value={task.title}
         onChange={(e) => {
           editedTask.title = e.target.value;
-          dispatch({
-            type: TaskActionType.EDIT,
-            task: editedTask,
-          });
+          dispatch(editTask(Object.assign({}, editedTask)));
         }}
       />
       <TextField
@@ -83,10 +78,7 @@ function TMEditedTask({
         value={task.description}
         onChange={(e) => {
           editedTask.description = e.target.value;
-          dispatch({
-            type: TaskActionType.EDIT,
-            task: editedTask,
-          });
+          dispatch(editTask(Object.assign({}, editedTask)));
         }}
       />
       {Status[statusKey!].icon}
@@ -99,10 +91,7 @@ function TMEditedTask({
           value={editedTask.assignedTo}
           onChange={(e) => {
             editedTask.assignedTo = e.target.value;
-            dispatch({
-              type: TaskActionType.EDIT,
-              task: editedTask,
-            });
+            dispatch(editTask(Object.assign({}, editedTask)));
           }}
         >
           {usersOptions}
@@ -114,10 +103,7 @@ function TMEditedTask({
           value={dayjs(task.dueDate)}
           onChange={(newDate) => {
             editedTask.dueDate = newDate!.toISOString().slice(0, 10);
-            dispatch({
-              type: TaskActionType.EDIT,
-              task: editedTask,
-            });
+            dispatch(editTask(Object.assign({}, editedTask)));
           }}
         />
       </LocalizationProvider>

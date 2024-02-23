@@ -1,10 +1,9 @@
 import { Stack } from "@mui/material";
-import { useAuth } from "../../services/provider/AuthProvider";
-import { useTasks } from "../../services/provider/TasksProvider";
 import TVTask from "./TVTask";
-import { ITaskContext } from "../../types/providers-types/TasksProviderTypes";
-import { IAuthContext } from "../../types/providers-types/AuthProviderTypes";
 import Task from "../../types/Task";
+import { useAppSelector } from "../../redux/hooks";
+import { selectAuthUser } from "../../redux/reducers/authSlice";
+import { selectTasks } from "../../redux/reducers/tasksSlice";
 
 interface TVTaskListProps {
   textFilter: string;
@@ -12,17 +11,13 @@ interface TVTaskListProps {
 }
 
 function TVTaskList({ textFilter, statusFilter }: TVTaskListProps) {
-  const tasks: ITaskContext = useTasks();
-  const auth: IAuthContext = useAuth();
+  const auth = useAppSelector(selectAuthUser);
+  const tasks = useAppSelector(selectTasks);
 
-  if (tasks.tasks === null || auth.user === null) {
-    return <></>;
-  }
-
-  let tasksJsx = tasks.tasks
+  let tasksJsx = tasks
     .filter((task: Task) => {
       if (
-        task.assignedTo.toLowerCase().indexOf(auth.user!.name.toLowerCase()) !==
+        task.assignedTo.toLowerCase().indexOf(auth!.name.toLowerCase()) !==
           -1 &&
         task.title.toLowerCase().indexOf(textFilter.toLowerCase()) !== -1 &&
         task.status.toLowerCase().indexOf(statusFilter.toLowerCase()) !== -1

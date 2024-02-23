@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../services/provider/AuthProvider";
 import {
   AppBar,
   Box,
@@ -14,18 +13,17 @@ import {
 import { IPath, Paths } from "../services/Paths";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import {
-  AuthActionType,
-  IAuthContext,
-} from "../types/providers-types/AuthProviderTypes";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { logout, selectAuthUser } from "../redux/reducers/authSlice";
 
 function NavBar() {
-  const auth: IAuthContext = useAuth();
+  const auth = useAppSelector(selectAuthUser);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement | null>(null);
 
-  if (auth.user === null) {
+  if (auth === null) {
     return <></>;
   }
 
@@ -39,9 +37,7 @@ function NavBar() {
 
   function linkTo(path: string): void {
     if (path === Paths.login.path) {
-      auth.dispatch({
-        type: AuthActionType.LOGOUT,
-      });
+      dispatch(logout());
     }
     navigate(path);
   }
@@ -53,7 +49,7 @@ function NavBar() {
       continue;
     }
     for (let roleKey in Paths[pathKey].role) {
-      if (auth.user!.role === Paths[pathKey].role[roleKey]) {
+      if (auth!.role === Paths[pathKey].role[roleKey]) {
         authorizedPaths.push(Paths[pathKey]);
       }
     }

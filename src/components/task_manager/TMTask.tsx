@@ -1,17 +1,12 @@
 import { useState } from "react";
-import { useTasks } from "../../services/provider/TasksProvider";
 import Task from "../../types/Task";
 import { Button, Stack, Typography } from "@mui/material";
-
-import { useUsers } from "../../services/provider/UsersProvider";
 import Status from "../../types/Status";
 import { ItemTMTask } from "../../style/style";
-import {
-  ITaskContext,
-  TaskActionType,
-} from "../../types/providers-types/TasksProviderTypes";
-import { IUserContext } from "../../types/providers-types/UsersProviderTypes";
 import TMEditedTask from "./TMEditedTask";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { removeTask } from "../../redux/reducers/tasksSlice";
+import { selectUsers } from "../../redux/reducers/usersSlice";
 
 interface TMTaskProps {
   task: Task;
@@ -19,12 +14,8 @@ interface TMTaskProps {
 
 function TMTask({ task }: TMTaskProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const tasks: ITaskContext = useTasks();
-  const users: IUserContext = useUsers();
-
-  if (users.users === null || tasks.tasks === null) {
-    return <></>;
-  }
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
 
   let statusKey: string | undefined = Object.keys(Status).find(
     (key: string) => Status[key].name === task.status
@@ -34,9 +25,8 @@ function TMTask({ task }: TMTaskProps) {
     return (
       <TMEditedTask
         task={task}
-        dispatch={tasks.dispatch}
         statusKey={statusKey}
-        users={users.users}
+        users={users}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
       ></TMEditedTask>
@@ -74,14 +64,7 @@ function TMTask({ task }: TMTaskProps) {
         <br />
         <div style={{ marginTop: "-1.5rem" }}>{Status[statusKey!].icon}</div>
         <Button onClick={() => setIsEditing(!isEditing)}>Edit</Button>
-        <Button
-          onClick={() =>
-            tasks.dispatch({
-              type: TaskActionType.DELETE,
-              task: task,
-            })
-          }
-        >
+        <Button onClick={() => dispatch(removeTask(Object.assign({}, task)))}>
           Delete
         </Button>
       </ItemTMTask>

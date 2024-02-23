@@ -1,0 +1,53 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Mario Rossi",
+      "email": "mario.rossi@example.com",
+      "role": "Manager",
+      "password": ""
+    },
+    {
+      "id": 2,
+      "name": "Luca Bianchi",
+      "email": "luca.bianchi@example.com",
+      "role": "Team Leader",
+      "password": ""
+    },
+    {
+      "id": 3,
+      "name": "Chiara Ferrara",
+      "email": "chiara.ferrara@example.com",
+      "role": "Analista",
+      "password": ""
+    },
+    {
+      "id": 4,
+      "name": "Giulia Gallo",
+      "email": "giulia.gallo@example.com",
+      "role": "Sviluppatore",
+      "password": ""
+    },
+    {
+      "id": 5,
+      "name": "Marco Verdi",
+      "email": "marco.verdi@example.com",
+      "role": "HR",
+      "password": ""
+    },
+    {
+      "id": 6,
+      "name": "Sara Conti",
+      "email": "sara.conti@example.com",
+      "role": "Marketing",
+      "password": ""
+    },
+    {
+      "id": 7,
+      "name": "Luigi Neri",
+      "email": "luigi.neri@example.com",
+      "role": "Amministrazione",
+      "password": ""
+    }
+  ]
+}

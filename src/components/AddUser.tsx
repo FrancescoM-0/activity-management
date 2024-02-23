@@ -7,25 +7,18 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useUsers } from "../services/provider/UsersProvider";
 import User from "../types/User";
 import { Toast, notifySucces, notifyWarn } from "../services/Toast";
 import { StyledPaperAddUser } from "../style/style";
-import {
-  IUserContext,
-  UserActionType,
-} from "../types/providers-types/UsersProviderTypes";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { addUser, selectUsers } from "../redux/reducers/usersSlice";
 
 function AddUser() {
-  const users: IUserContext = useUsers();
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
   const theme: Theme = useTheme();
   const isMobile: boolean = useMediaQuery(theme.breakpoints.down("sm"));
   let password: string = User.generateInitialPassword(10);
-
-  if (users.users === null) {
-    return <></>;
-  }
-  
 
   function handleClick(): void {
     const name: string = (document.getElementById("name") as HTMLInputElement)
@@ -40,22 +33,21 @@ function AddUser() {
       return;
     }
 
-    const resetField=()=>{
-      (document.getElementById("name")as HTMLInputElement).value="";
-      (document.getElementById("email")as HTMLInputElement).value="";
-      (document.getElementById("role")as HTMLInputElement).value="";
-     }
+    const resetField = () => {
+      (document.getElementById("name") as HTMLInputElement).value = "";
+      (document.getElementById("email") as HTMLInputElement).value = "";
+      (document.getElementById("role") as HTMLInputElement).value = "";
+    };
 
-    users.dispatch({
-      type: UserActionType.ADD,
-      user: new User(
-        users.users.length + 1,
-        name,
-        email,
-        role,
-        User.encryptPassword(password)
-      ),
-    });
+    let user = new User(
+      users.length + 1,
+      name,
+      email,
+      role,
+      User.encryptPassword(password)
+    );
+
+    dispatch(addUser(Object.assign({}, user)));
 
     notifySucces("Utente aggiunto");
     resetField();

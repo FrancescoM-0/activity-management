@@ -25,9 +25,9 @@ class User {
     return bcrypt.hashSync(password, salt);
   }
 
-  checkPassword(password: string) {
+  static checkPassword(plainTextPassword: string, passwordToCompare: string) {
     let bcrypt = require("bcryptjs");
-    return bcrypt.compareSync(password, this.password);
+    return bcrypt.compareSync(plainTextPassword, passwordToCompare);
   }
 
   static generateInitialPassword(length: number): string {

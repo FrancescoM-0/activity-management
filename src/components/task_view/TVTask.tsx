@@ -7,25 +7,18 @@ import {
   Typography,
 } from "@mui/material";
 import Reminder from "../Reminder";
-import { useTasks } from "../../services/provider/TasksProvider";
 import Status from "../../types/Status";
 import Task from "../../types/Task";
 import { ItemTVTask } from "../../style/style";
-import {
-  ITaskContext,
-  TaskActionType,
-} from "../../types/providers-types/TasksProviderTypes";
+import { useAppDispatch } from "../../redux/hooks";
+import { editTask } from "../../redux/reducers/tasksSlice";
 
 interface TVTaskProps {
   task: Task;
 }
 
 function TVTask({ task }: TVTaskProps) {
-  const tasks: ITaskContext = useTasks();
-
-  if (tasks.tasks === null) {
-    return <></>;
-  }
+  const dispatch = useAppDispatch();
 
   let editedTask: Task = new Task(
     task.id,
@@ -80,10 +73,7 @@ function TVTask({ task }: TVTaskProps) {
             label="Status"
             onChange={(e) => {
               editedTask.status = e.target.value;
-              tasks.dispatch({
-                type: TaskActionType.EDIT,
-                task: editedTask,
-              });
+              dispatch(editTask(Object.assign({}, editedTask)));
             }}
           >
             {statusOptions}

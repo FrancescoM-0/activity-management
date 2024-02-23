@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../provider/AuthProvider";
-import { IAuthContext } from "../../types/providers-types/AuthProviderTypes";
+import { useAppSelector } from "../../redux/hooks";
+import { selectAuthUser } from "../../redux/reducers/authSlice";
 
 function RouteGuard() {
-  const auth: IAuthContext = useAuth();
+  const auth = useAppSelector(selectAuthUser);
 
-  if (auth.user === null) {
+  if (auth === null) {
     return <Navigate to="/login" replace></Navigate>;
   }
 

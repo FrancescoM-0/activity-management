@@ -1,4 +1,3 @@
-import { useTasks } from "../../services/provider/TasksProvider";
 import Status from "../../types/Status";
 import {
   Button,
@@ -12,33 +11,26 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useUsers } from "../../services/provider/UsersProvider";
 import Task from "../../types/Task";
 import { ItemTMAddTask } from "../../style/style";
-import {
-  ITaskContext,
-  TaskActionType,
-} from "../../types/providers-types/TasksProviderTypes";
-import { IUserContext } from "../../types/providers-types/UsersProviderTypes";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { selectUsers } from "../../redux/reducers/usersSlice";
+import { addTask } from "../../redux/reducers/tasksSlice";
 
 interface TMAddTaskProps {
   newTaskId: number;
 }
 
 function TMAddTask({ newTaskId }: TMAddTaskProps) {
-  const tasks: ITaskContext = useTasks();
-  const users: IUserContext = useUsers();
-
-  if (users.users === null || tasks.tasks === null) {
-    return <></>;
-  }
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
 
   let newTask: Task = new Task(newTaskId, "", "", Status.Planned.name, "", "");
   let usersOptions: JSX.Element[] = [];
-  for (let i = 0; i < users.users.length; i++) {
+  for (let i = 0; i < users.length; i++) {
     usersOptions.push(
-      <MenuItem key={users.users[i].id} value={users.users[i].name}>
-        {users.users[i].name}
+      <MenuItem key={users[i].id} value={users[i].name}>
+        {users[i].name}
       </MenuItem>
     );
   }
@@ -88,14 +80,7 @@ function TMAddTask({ newTaskId }: TMAddTaskProps) {
           }}
         />
       </LocalizationProvider>
-      <Button
-        onClick={() =>
-          tasks.dispatch({
-            type: TaskActionType.ADD,
-            task: newTask,
-          })
-        }
-      >
+      <Button onClick={() => dispatch(addTask(Object.assign({}, newTask)))}>
         Add
       </Button>
     </ItemTMAddTask>

@@ -1,27 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../services/provider/AuthProvider";
-import { useUsers } from "../services/provider/UsersProvider";
 import { Button, Container, TextField, Typography } from "@mui/material";
 import { Toast, notifyError, notifyWarn } from "../services/Toast";
 import { ItemLogin } from "../style/style";
 import User from "../types/User";
-import {
-  AuthActionType,
-  IAuthContext,
-} from "../types/providers-types/AuthProviderTypes";
-import { IUserContext } from "../types/providers-types/UsersProviderTypes";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { login } from "../redux/reducers/authSlice";
+import { selectUsers } from "../redux/reducers/usersSlice";
 
 function Login() {
-  const users: IUserContext = useUsers();
-  const auth: IAuthContext = useAuth();
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  if (users.users === null) {
-    return <></>;
-  }
-
   function handleClick(): void {
-    if (users.users.length === 0) {
+    if (users.length === 0) {
       notifyError("Email o Password errata");
     }
 
@@ -36,12 +28,9 @@ function Login() {
       return;
     }
 
-    users.users.forEach((user: User) => {
-      if (user.email === email && user.checkPassword(password)) {
-        auth.dispatch({
-          type: AuthActionType.LOGIN,
-          user: user,
-        });
+    users.forEach((user: User) => {
+      if (user.email === email && User.checkPassword(password, user.password)) {
+        dispatch(login(Object.assign({}, user)));
         navigate("/task-list");
         return;
       }
