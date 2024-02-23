@@ -1,19 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "./provider/AuthProvider";
 import { Paths } from "./Paths";
-import { IAuthContext } from "../types/providers-types/AuthProviderTypes";
+import { useAppSelector } from "../redux/hooks";
+import { selectAuthUser } from "../redux/reducers/authSlice";
 
 interface RoleGuardProps {
   authorizedRole: string[];
 }
 
 function RoleGuard({ authorizedRole }: RoleGuardProps) {
-  const auth: IAuthContext = useAuth();
-
-  // TODO
-  /*if (auth.user === null) {
-    return <></>;
-  }*/
+  const auth = useAppSelector(selectAuthUser);
 
   let isAuthorized: boolean = false;
 
@@ -22,7 +17,7 @@ function RoleGuard({ authorizedRole }: RoleGuardProps) {
   }
 
   for (let roleKey in authorizedRole) {
-    if (auth.user!.role === authorizedRole[roleKey]) {
+    if (auth!.role === authorizedRole[roleKey]) {
       isAuthorized = true;
       break;
     }

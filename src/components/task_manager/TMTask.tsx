@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { useTasks } from "../../services/provider/TasksProvider";
 import Task from "../../types/Task";
-import { Button, Stack, Typography } from "@mui/material";
-
-import { useUsers } from "../../services/provider/UsersProvider";
+import { Fab, Stack, Typography } from "@mui/material";
 import Status from "../../types/Status";
 import { ItemTMTask } from "../../style/style";
-import {
-  ITaskContext,
-  TaskActionType,
-} from "../../types/providers-types/TasksProviderTypes";
-import { IUserContext } from "../../types/providers-types/UsersProviderTypes";
 import TMEditedTask from "./TMEditedTask";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { removeTask } from "../../redux/reducers/tasksSlice";
+import { selectUsers } from "../../redux/reducers/usersSlice";
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface TMTaskProps {
   task: Task;
@@ -19,12 +18,9 @@ interface TMTaskProps {
 
 function TMTask({ task }: TMTaskProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const tasks: ITaskContext = useTasks();
-  const users: IUserContext = useUsers();
-
-  if (users.users === null || tasks.tasks === null) {
-    return <></>;
-  }
+  const users = useAppSelector(selectUsers);
+  const dispatch = useAppDispatch();
+ 
 
   let statusKey: string | undefined = Object.keys(Status).find(
     (key: string) => Status[key].name === task.status
@@ -34,9 +30,8 @@ function TMTask({ task }: TMTaskProps) {
     return (
       <TMEditedTask
         task={task}
-        dispatch={tasks.dispatch}
         statusKey={statusKey}
-        users={users.users}
+        users={users}
         isEditing={isEditing}
         setIsEditing={setIsEditing}
       ></TMEditedTask>
@@ -68,22 +63,18 @@ function TMTask({ task }: TMTaskProps) {
             </Typography>
           </div>
         </Stack>
-        <h3 style={{ float: "right", marginRight: "2rem", width: "10rem" }}>
-          {task.dueDate}
-        </h3>
-        <br />
-        <div style={{ marginTop: "-1.5rem" }}>{Status[statusKey!].icon}</div>
-        <Button onClick={() => setIsEditing(!isEditing)}>Edit</Button>
-        <Button
-          onClick={() =>
-            tasks.dispatch({
-              type: TaskActionType.DELETE,
-              task: task,
-            })
-          }
-        >
-          Delete
-        </Button>
+        <div style={{ float: "right", marginRight: "-1.5rem", width: "10rem",marginTop:"-11rem" }}>
+        {Status[statusKey!].icon}
+        </div>
+        <br /><br />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "-1.3rem" }}>
+          <h3>{task.dueDate}</h3>
+        <div style={{ display: "flex", alignItems: "right",marginBottom:"-1.5rem" }}>
+          <Fab sx={{ marginRight: "1rem" }} onClick={() => setIsEditing(!isEditing)}><EditIcon /></Fab>
+          <Fab onClick={() => dispatch(removeTask(Object.assign({}, task)))}><DeleteIcon /></Fab>
+        </div>
+      </div>
+      
       </ItemTMTask>
     );
   }

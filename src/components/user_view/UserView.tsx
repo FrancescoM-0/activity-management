@@ -1,22 +1,14 @@
 import { Button, TextField, Tooltip, Typography } from "@mui/material";
-import { useAuth } from "../../services/provider/AuthProvider";
-import { useUsers } from "../../services/provider/UsersProvider";
 import User from "../../types/User";
 import { Toast, notifySucces, notifyWarn } from "../../services/Toast";
 import { StyledPaperUserView } from "../../style/style";
-import {
-  IUserContext,
-  UserActionType,
-} from "../../types/providers-types/UsersProviderTypes";
-import { IAuthContext } from "../../types/providers-types/AuthProviderTypes";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { selectAuthUser } from "../../redux/reducers/authSlice";
+import { editUser } from "../../redux/reducers/usersSlice";
 
 function UserView() {
-  const auth: IAuthContext = useAuth();
-  const users: IUserContext = useUsers();
-
-  if (users.users === null || auth.user === null) {
-    return <></>;
-  }
+  const auth = useAppSelector(selectAuthUser);
+  const dispatch = useAppDispatch();
 
   function handleClick(): void {
     const newPassword: string = (
@@ -27,20 +19,19 @@ function UserView() {
       notifyWarn("Uno o più campi vuoti");
       return;
     }
-    const resetField=()=>{
-      (document.getElementById("newPassword")as HTMLInputElement).value="";
-    }
+    const resetField = () => {
+      (document.getElementById("newPassword") as HTMLInputElement).value = "";
+    };
 
-    users.dispatch({
-      type: UserActionType.EDIT,
-      user: new User(
-        auth.user!.id,
-        auth.user!.name,
-        auth.user!.email,
-        auth.user!.role,
-        User.encryptPassword(newPassword)
-      ),
-    });
+    let user = new User(
+      auth!.id,
+      auth!.name,
+      auth!.email,
+      auth!.role,
+      User.encryptPassword(newPassword)
+    );
+
+    dispatch(editUser(Object.assign({}, user)));
 
     notifySucces("Password modificata");
     resetField();
@@ -53,12 +44,12 @@ function UserView() {
           Utenti
         </Typography>
         <div style={{ textAlign: "left", marginTop: "2rem" }}>
-          <Typography variant="h5">{auth.user!.name}</Typography>
+          <Typography variant="h5">{auth!.name}</Typography>
           <Typography variant="body2" color="text.secondary">
-            {auth.user!.email}
+            {auth!.email}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {auth.user!.role}
+            {auth!.role}
           </Typography>
           <br />
           <Tooltip title="Cambia password">

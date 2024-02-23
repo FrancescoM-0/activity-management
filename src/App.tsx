@@ -1,5 +1,3 @@
-import { TasksProvider } from "./services/provider/TasksProvider";
-import { UsersProvider } from "./services/provider/UsersProvider";
 import {
   Navigate,
   Route,
@@ -8,39 +6,46 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import { AuthProvider } from "./services/provider/AuthProvider";
 import RouteGuard from "./services/auth/RouteGuard";
 import { Paths, getPathRoute } from "./services/Paths";
+import { useEffect } from "react";
+import { useAppDispatch } from "./redux/hooks";
+import { fetchInitialUsers } from "./redux/reducers/usersSlice";
+import { fetchInitialTasks } from "./redux/reducers/tasksSlice";
+import UserCache from "./services/auth/UserCache";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
 function Root() {
-  return (
-    <UsersProvider>
-      <AuthProvider>
-        <TasksProvider>
-          <NavBar></NavBar>
-          <Routes>
-            <Route element={<RouteGuard></RouteGuard>}>
-              {getPathRoute(Paths.taskView)}
-              {getPathRoute(Paths.taskManager)}
-              {getPathRoute(Paths.addUser)}
-              {getPathRoute(Paths.userView)}
-              <Route
-                path="/"
-                element={<Navigate to={Paths.taskView.path}></Navigate>}
-              ></Route>
-            </Route>
+  const dispatch = useAppDispatch();
 
-            {getPathRoute(Paths.login)}
-            <Route
-              path="/"
-              element={<Navigate to={Paths.login.path}></Navigate>}
-            ></Route>
-          </Routes>
-        </TasksProvider>
-      </AuthProvider>
-    </UsersProvider>
+  useEffect(() => {
+    dispatch(fetchInitialUsers());
+    dispatch(fetchInitialTasks());
+  }, [dispatch]);
+
+  return (
+    <UserCache>
+      <NavBar></NavBar>
+      <Routes>
+        <Route element={<RouteGuard></RouteGuard>}>
+          {getPathRoute(Paths.taskView)}
+          {getPathRoute(Paths.taskManager)}
+          {getPathRoute(Paths.addUser)}
+          {getPathRoute(Paths.userView)}
+          <Route
+            path="/"
+            element={<Navigate to={Paths.taskView.path}></Navigate>}
+          ></Route>
+        </Route>
+
+        {getPathRoute(Paths.login)}
+        <Route
+          path="*"
+          element={<Navigate to={Paths.login.path}></Navigate>}
+        ></Route>
+      </Routes>
+    </UserCache>
   );
 }
 

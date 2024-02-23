@@ -1,32 +1,20 @@
-import { Dispatch } from "react";
 import Task from "../../types/Task";
-import {
-  ITaskAction,
-  TaskActionType,
-} from "../../types/providers-types/TasksProviderTypes";
 import { addressTasks } from "./httpConst";
 
-function fetchTasks(dispatch: Dispatch<ITaskAction>) {
-  fetch(addressTasks)
-    .then((res) => {
-      return res.json();
-    })
-    .then((jsonTasks: Task[]) => {
-      let t = jsonTasks.map((task: Task) => {
-        return new Task(
-          task.id,
-          task.title,
-          task.description,
-          task.status,
-          task.assignedTo,
-          task.dueDate
-        );
-      });
-      dispatch({
-        type: TaskActionType.INITIALVALUE,
-        initalTasks: t,
-      });
-    });
+async function fetchTasks() {
+  const res = await fetch(addressTasks);
+  const jsonTasks = await res.json();
+  let tasks = jsonTasks.map((task: Task) => {
+    return new Task(
+      task.id,
+      task.title,
+      task.description,
+      task.status,
+      task.assignedTo,
+      task.dueDate
+    );
+  });
+  return tasks;
 }
 
 function postTasks(newTasks: Task[]): void {

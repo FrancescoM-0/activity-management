@@ -1,31 +1,13 @@
-import { Dispatch } from "react";
-import {
-  IUserAction,
-  UserActionType,
-} from "../../types/providers-types/UsersProviderTypes";
 import User from "../../types/User";
 import { addressUsers } from "./httpConst";
 
-function fetchUsers(dispatch: Dispatch<IUserAction>) {
-  fetch(addressUsers)
-    .then((res) => {
-      return res.json();
-    })
-    .then((jsonUsers: User[]) => {
-      let u = jsonUsers.map((user: User) => {
-        return new User(
-          user.id,
-          user.name,
-          user.email,
-          user.role,
-          user.password
-        );
-      });
-      dispatch({
-        type: UserActionType.INITIALVALUE,
-        initialUsers: u,
-      });
-    });
+async function fetchUsers() {
+  const res = await fetch(addressUsers);
+  const jsonUsers = await res.json();
+  let users = jsonUsers.map((user: User) => {
+    return new User(user.id, user.name, user.email, user.role, user.password);
+  });
+  return users;
 }
 
 function postUsers(newUsers: User[]): void {
