@@ -13,8 +13,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Task from "../../types/Task";
 import { ItemTMAddTask } from "../../style/style";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectUsers } from "../../redux/reducers/usersSlice";
+import { useAppDispatch, useUsers } from "../../redux/hooks";
 import { addTask } from "../../redux/reducers/tasksSlice";
 
 interface TMAddTaskProps {
@@ -22,7 +21,7 @@ interface TMAddTaskProps {
 }
 
 function TMAddTask({ newTaskId }: TMAddTaskProps) {
-  const users = useAppSelector(selectUsers);
+  const users = useUsers();
   const dispatch = useAppDispatch();
 
   let newTask: Task = new Task(newTaskId, "", "", Status.Planned.name, "", "");

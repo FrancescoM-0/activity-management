@@ -11,8 +11,7 @@ import {
 } from "@mui/material";
 import TMUser from "./TMUser";
 import User from "../../types/User";
-import { useAppSelector } from "../../redux/hooks";
-import { selectUsers } from "../../redux/reducers/usersSlice";
+import { useUsers } from "../../redux/hooks";
 
 interface TMUserListProps {
   onUserFilterChange: (user: string) => void;
@@ -21,7 +20,7 @@ interface TMUserListProps {
 function TMUserList({ onUserFilterChange }: TMUserListProps) {
   const theme: Theme = useTheme();
   const isMobile: boolean = useMediaQuery(theme.breakpoints.down("sm"));
-  const users = useAppSelector(selectUsers);
+  const users = useUsers();
 
   let usersJsx: JSX.Element[] = users.map((user: User) => {
     return (

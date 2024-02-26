@@ -1,9 +1,8 @@
 import { Stack } from "@mui/material";
 import TVTask from "./TVTask";
 import Task from "../../types/Task";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppSelector, useTasks } from "../../redux/hooks";
 import { selectAuthUser } from "../../redux/reducers/authSlice";
-import { selectTasks } from "../../redux/reducers/tasksSlice";
 
 interface TVTaskListProps {
   textFilter: string;
@@ -12,7 +11,7 @@ interface TVTaskListProps {
 
 function TVTaskList({ textFilter, statusFilter }: TVTaskListProps) {
   const auth = useAppSelector(selectAuthUser);
-  const tasks = useAppSelector(selectTasks);
+  const tasks = useTasks();
 
   let tasksJsx = tasks
     .filter((task: Task) => {

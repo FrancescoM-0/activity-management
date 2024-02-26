@@ -18,10 +18,7 @@ import User from "../../types/User";
 import dayjs from "dayjs";
 import { editTask } from "../../redux/reducers/tasksSlice";
 import { useAppDispatch } from "../../redux/hooks";
-import SaveIcon from '@mui/icons-material/Save';
-import Save from "@mui/icons-material/Save";
-
-
+import SaveIcon from "@mui/icons-material/Save";
 
 interface TMEditedTaskProps {
   task: Task;
@@ -111,7 +108,9 @@ function TMEditedTask({
           }}
         />
       </LocalizationProvider>
-      <Fab sx={{marginLeft:"1rem"}} onClick={() => setIsEditing(!isEditing)}><Save/></Fab>
+      <Fab sx={{ marginLeft: "1rem" }} onClick={() => setIsEditing(!isEditing)}>
+        <SaveIcon />
+      </Fab>
     </ItemTMTask>
   );
 }

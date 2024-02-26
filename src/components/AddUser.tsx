@@ -10,11 +10,11 @@ import {
 import User from "../types/User";
 import { Toast, notifySucces, notifyWarn } from "../services/Toast";
 import { StyledPaperAddUser } from "../style/style";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { addUser, selectUsers } from "../redux/reducers/usersSlice";
+import { useAppDispatch, useUsers } from "../redux/hooks";
+import { addUser } from "../redux/reducers/usersSlice";
 
 function AddUser() {
-  const users = useAppSelector(selectUsers);
+  const users = useUsers();
   const dispatch = useAppDispatch();
   const theme: Theme = useTheme();
   const isMobile: boolean = useMediaQuery(theme.breakpoints.down("sm"));

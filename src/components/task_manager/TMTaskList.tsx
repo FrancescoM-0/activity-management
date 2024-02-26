@@ -5,8 +5,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import TMTask from "./TMTask";
 import TMAddTask from "./TMAddTask";
 import Task from "../../types/Task";
-import { useAppSelector } from "../../redux/hooks";
-import { selectTasks } from "../../redux/reducers/tasksSlice";
+import { useTasks } from "../../redux/hooks";
 
 interface TMTaskListProps {
   userFilter: string;
@@ -16,7 +15,7 @@ interface TMTaskListProps {
 
 function TMTaskList({ userFilter, textFilter, statusFilter }: TMTaskListProps) {
   const [addTask, setAddTask] = useState<boolean>(false);
-  const tasks = useAppSelector(selectTasks);
+  const tasks = useTasks();
 
   let tasksJsx = tasks
     .filter((task: Task) => {

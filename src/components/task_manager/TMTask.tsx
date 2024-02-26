@@ -4,13 +4,10 @@ import { Fab, Stack, Typography } from "@mui/material";
 import Status from "../../types/Status";
 import { ItemTMTask } from "../../style/style";
 import TMEditedTask from "./TMEditedTask";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useUsers } from "../../redux/hooks";
 import { removeTask } from "../../redux/reducers/tasksSlice";
-import { selectUsers } from "../../redux/reducers/usersSlice";
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface TMTaskProps {
   task: Task;
@@ -18,9 +15,8 @@ interface TMTaskProps {
 
 function TMTask({ task }: TMTaskProps) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const users = useAppSelector(selectUsers);
+  const users = useUsers();
   const dispatch = useAppDispatch();
- 
 
   let statusKey: string | undefined = Object.keys(Status).find(
     (key: string) => Status[key].name === task.status
@@ -63,18 +59,45 @@ function TMTask({ task }: TMTaskProps) {
             </Typography>
           </div>
         </Stack>
-        <div style={{ float: "right", marginRight: "-1.5rem", width: "10rem",marginTop:"-11rem" }}>
-        {Status[statusKey!].icon}
+        <div
+          style={{
+            float: "right",
+            marginRight: "-1.5rem",
+            width: "10rem",
+            marginTop: "-11rem",
+          }}
+        >
+          {Status[statusKey!].icon}
         </div>
-        <br /><br />
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "-1.3rem" }}>
+        <br />
+        <br />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "-1.3rem",
+          }}
+        >
           <h3>{task.dueDate}</h3>
-        <div style={{ display: "flex", alignItems: "right",marginBottom:"-1.5rem" }}>
-          <Fab sx={{ marginRight: "1rem" }} onClick={() => setIsEditing(!isEditing)}><EditIcon /></Fab>
-          <Fab onClick={() => dispatch(removeTask(Object.assign({}, task)))}><DeleteIcon /></Fab>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "right",
+              marginBottom: "-1.5rem",
+            }}
+          >
+            <Fab
+              sx={{ marginRight: "1rem" }}
+              onClick={() => setIsEditing(!isEditing)}
+            >
+              <EditIcon />
+            </Fab>
+            <Fab onClick={() => dispatch(removeTask(Object.assign({}, task)))}>
+              <DeleteIcon />
+            </Fab>
+          </div>
         </div>
-      </div>
-      
       </ItemTMTask>
     );
   }

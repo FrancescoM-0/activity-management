@@ -3,12 +3,11 @@ import { Button, Container, TextField, Typography } from "@mui/material";
 import { Toast, notifyError, notifyWarn } from "../services/Toast";
 import { ItemLogin } from "../style/style";
 import User from "../types/User";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useUsers } from "../redux/hooks";
 import { login } from "../redux/reducers/authSlice";
-import { selectUsers } from "../redux/reducers/usersSlice";
 
 function Login() {
-  const users = useAppSelector(selectUsers);
+  const users = useUsers();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
