@@ -1,21 +1,68 @@
 import User from "../../types/User";
-import { addressUsers } from "./httpConst";
+import { fetchGraphql } from "./httpConst";
 
 async function fetchUsers() {
-  const res = await fetch(addressUsers);
-  const jsonUsers = await res.json();
-  let users = jsonUsers.map((user: User) => {
-    return new User(user.id, user.name, user.email, user.role, user.password);
-  });
-  return users;
+  let query = `query GetUsers {
+    getUsers{id name email role password}
+  }`;
+
+  let data = await fetchGraphql(query);
+  return data.getUsers;
 }
 
-function postUsers(newUsers: User[]): void {
-  fetch(addressUsers, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(newUsers),
+async function createUser(newUser: User) {
+  let query = `mutation CreateUser($input: UserInput) {
+    createUser(input: $input) {id name email role password}
+  }`;
+
+  let data = await fetchGraphql(query, {
+    input: {
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.role,
+      password: newUser.password,
+    },
   });
+  return data.createUser;
 }
 
-export { fetchUsers, postUsers };
+async function updateUser(user: User) {
+  let query = `mutation UpdateUser($id: ID!, $input: UserInput) {
+    updateUser(id: $id, input: $input) {id name email role password}
+  }`;
+
+  let data = await fetchGraphql(query, {
+    id: user.id,
+    input: {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      password: user.password,
+    },
+  });
+  return data.updateUser;
+}
+
+async function deleteUser(userToDelete: User) {
+  let query = `mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {id name email role password}
+  }`;
+
+  let data = await fetchGraphql(query, {
+    id: userToDelete.id,
+  });
+  return data.deleteUser;
+}
+
+async function setUsers(users: User[]) {
+  let query = `mutation SetUsers($input: [SetUserInput]!) {
+    setUsers(input: $input)
+  }`;
+
+  let data = await fetchGraphql(query, {
+    input: users,
+  });
+  return data.setUsers;
+}
+
+export { fetchUsers, createUser, updateUser, deleteUser, setUsers };

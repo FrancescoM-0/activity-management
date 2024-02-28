@@ -28,10 +28,14 @@ function Login() {
     }
 
     users.forEach((user: User) => {
-      if (user.email === email && User.checkPassword(password, user.password)) {
-        dispatch(login(Object.assign({}, user)));
-        navigate("/task-list");
-        return;
+      if (user.email === email) {
+        if (user.password === "") {
+          console.log(User.encryptPassword(password));
+        } else if (User.checkPassword(password, user.password)) {
+          dispatch(login(Object.assign({}, user)));
+          navigate("/task-list");
+          return;
+        }
       }
     });
 

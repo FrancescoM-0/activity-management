@@ -6,7 +6,13 @@ import {
 } from "@reduxjs/toolkit";
 import User from "../../types/User";
 import { RootState } from "../store";
-import { fetchUsers, postUsers } from "../../services/http/usersHttp";
+import {
+  createUser,
+  deleteUser,
+  fetchUsers,
+  setUsers,
+  updateUser,
+} from "../../services/http/usersHttp";
 import { areEqual } from "../../utils/compareArray";
 
 interface IUsersState {
@@ -39,7 +45,7 @@ const usersSlice = createSlice({
       newUsers.push(action.payload);
 
       setPastAndFuture(state, newUsers);
-      postUsers(state.users);
+      createUser(action.payload);
     },
     editUser: (state, action: PayloadAction<User>) => {
       let newUsers: User[] = [];
@@ -50,7 +56,7 @@ const usersSlice = createSlice({
       }
 
       setPastAndFuture(state, newUsers);
-      postUsers(state.users);
+      updateUser(action.payload);
     },
     removeUser: (state, action: PayloadAction<User>) => {
       let newUsers: User[] = [];
@@ -60,7 +66,7 @@ const usersSlice = createSlice({
       }
 
       setPastAndFuture(state, newUsers);
-      postUsers(state.users);
+      deleteUser(action.payload);
     },
     undoUsers: (state) => {
       if (
@@ -72,14 +78,14 @@ const usersSlice = createSlice({
       ) {
         state.future.unshift(state.users);
         state.users = state.past.pop()!;
-        postUsers(state.users);
+        setUsers(state.users);
       }
     },
     redoUsers: (state) => {
       if (state.future.length !== 0) {
         state.past.push(state.users);
         state.users = state.future.shift()!;
-        postUsers(state.users);
+        setUsers(state.users);
       }
     },
   },

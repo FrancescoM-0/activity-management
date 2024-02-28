@@ -6,7 +6,13 @@ import {
 } from "@reduxjs/toolkit";
 import Task from "../../types/Task";
 import { RootState } from "../store";
-import { fetchTasks, postTasks } from "../../services/http/tasksHttp";
+import {
+  fetchTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+  setTasks,
+} from "../../services/http/tasksHttp";
 import { areEqual } from "../../utils/compareArray";
 
 interface ITasksState {
@@ -39,7 +45,7 @@ const tasksSlice = createSlice({
       newTasks.push(action.payload);
 
       setPastAndFuture(state, newTasks);
-      postTasks(state.tasks);
+      createTask(action.payload);
     },
     editTask: (state, action: PayloadAction<Task>) => {
       let newTasks: Task[] = [];
@@ -50,7 +56,7 @@ const tasksSlice = createSlice({
       }
 
       setPastAndFuture(state, newTasks);
-      postTasks(state.tasks);
+      updateTask(action.payload);
     },
     removeTask: (state, action: PayloadAction<Task>) => {
       let newTasks: Task[] = [];
@@ -60,7 +66,7 @@ const tasksSlice = createSlice({
       }
 
       setPastAndFuture(state, newTasks);
-      postTasks(state.tasks);
+      deleteTask(action.payload);
     },
     undoTasks: (state) => {
       if (
@@ -72,14 +78,14 @@ const tasksSlice = createSlice({
       ) {
         state.future.unshift(state.tasks);
         state.tasks = state.past.pop()!;
-        postTasks(state.tasks);
+        setTasks(state.tasks);
       }
     },
     redoTasks: (state) => {
       if (state.future.length !== 0) {
         state.past.push(state.tasks);
         state.tasks = state.future.shift()!;
-        postTasks(state.tasks);
+        setTasks(state.tasks);
       }
     },
   },
