@@ -3,12 +3,20 @@ import { Button, Container, TextField, Typography } from "@mui/material";
 import { Toast, notifyError, notifyWarn } from "../services/Toast";
 import { ItemLogin } from "../style/style";
 import User from "../types/User";
-import { useAppDispatch } from "../redux/hooks";
-import { login, loginFromCache } from "../redux/reducers/authSlice";
+import { useAppDispatch, useAuthUser } from "../redux/hooks";
+import { login } from "../redux/reducers/authSlice";
+import { useEffect } from "react";
 
 function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const auth = useAuthUser();
+
+  useEffect(() => {
+    if (auth != null) {
+      navigate("/task-list");
+    }
+  });
 
   function handleClick(): void {
     const email: string = (document.getElementById("email") as HTMLInputElement)
@@ -24,8 +32,7 @@ function Login() {
 
     const user = new User(-1, "", email, "", password);
     if (dispatch(login(user)) !== undefined) {
-      dispatch(loginFromCache(Object.assign({}, user)));
-      navigate("/task-list");
+      return;
     }
 
     notifyError("Email o Password errata");

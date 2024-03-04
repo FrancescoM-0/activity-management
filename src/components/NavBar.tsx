@@ -23,7 +23,6 @@ function NavBar() {
 
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement | null>(null);
 
-  //console.log(auth);
   if (auth === null) {
     return <></>;
   }

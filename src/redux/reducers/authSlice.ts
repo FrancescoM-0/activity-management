@@ -30,7 +30,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action: PayloadAction<User>) => {
+    builder.addCase(login.fulfilled, (state, action) => {
       if (action.payload !== null) {
         writeCacheUser(action.payload);
         state.user = action.payload;
