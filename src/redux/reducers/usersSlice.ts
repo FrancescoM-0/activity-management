@@ -10,7 +10,7 @@ import {
   createUser,
   deleteUser,
   fetchUsers,
-  setUsers,
+  replaceAllUsers,
   updateUser,
 } from "../../services/http/usersHttp";
 import { areEqual } from "../../utils/compareArray";
@@ -78,14 +78,14 @@ const usersSlice = createSlice({
       ) {
         state.future.unshift(state.users);
         state.users = state.past.pop()!;
-        setUsers(state.users);
+        replaceAllUsers(state.users);
       }
     },
     redoUsers: (state) => {
       if (state.future.length !== 0) {
         state.past.push(state.users);
         state.users = state.future.shift()!;
-        setUsers(state.users);
+        replaceAllUsers(state.users);
       }
     },
   },

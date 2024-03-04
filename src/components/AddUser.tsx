@@ -39,13 +39,7 @@ function AddUser() {
       (document.getElementById("role") as HTMLInputElement).value = "";
     };
 
-    let user = new User(
-      users.length + 1,
-      name,
-      email,
-      role,
-      User.encryptPassword(password)
-    );
+    let user = new User(users.length + 1, name, email, role, password);
 
     dispatch(addUser(Object.assign({}, user)));
 

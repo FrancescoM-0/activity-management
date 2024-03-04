@@ -39,13 +39,13 @@ async function createTask(newTask: Task) {
 }
 
 async function updateTask(task: Task) {
-  let query = `mutation UpdateTask($id: ID!, $input: TaskInput) {
-    updateTask(id: $id, input: $input) {id title description status assignedTo dueDate}
+  let query = `mutation UpdateTask($input: TaskInput) {
+    updateTask(input: $input) {id title description status assignedTo dueDate}
   }`;
 
   let data = await fetchGraphql(query, {
-    id: task.id,
     input: {
+      id: task.id,
       title: task.title,
       description: task.description,
       status: task.status,
@@ -57,8 +57,8 @@ async function updateTask(task: Task) {
 }
 
 async function deleteTask(taskToDelete: Task) {
-  let query = `mutation DeleteTask($id: ID!) {
-    deleteTask(id: $id) {id title description status assignedTo dueDate}
+  let query = `mutation DeleteTask($input: TaskInput) {
+    deleteTask(input: $input) {id title description status assignedTo dueDate}
   }`;
 
   let data = await fetchGraphql(query, {
@@ -67,15 +67,15 @@ async function deleteTask(taskToDelete: Task) {
   return data.deleteTask;
 }
 
-async function setTasks(tasks: Task[]) {
-  let query = `mutation SetTasks($input: [SetTaskInput]!) {
-    setTasks(input: $input)
+async function replaceAllTasks(tasks: Task[]) {
+  let query = `mutation ReplaceAllTasks($input: [TaskInput]!) {
+    replaceAllTasks(input: $input)
   }`;
 
   let data = await fetchGraphql(query, {
     input: tasks,
   });
-  return data.setTasks;
+  return data.replaceAllTasks;
 }
 
 export {
@@ -84,5 +84,5 @@ export {
   createTask,
   updateTask,
   deleteTask,
-  setTasks,
+  replaceAllTasks,
 };

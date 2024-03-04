@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { readCacheUser } from "./cacheAuth";
 import { useAppDispatch } from "../../redux/hooks";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../redux/reducers/authSlice";
+import { loginFromCache } from "../../redux/reducers/authSlice";
 
 interface UserCacheProps {
   children: ReactNode;
@@ -14,9 +14,8 @@ function UserCache({ children }: UserCacheProps) {
 
   useEffect(() => {
     let cacheUser = readCacheUser();
-
     if (cacheUser !== null) {
-      dispatch(login(Object.assign({}, cacheUser)));
+      dispatch(loginFromCache(Object.assign({}, cacheUser)));
       navigate("/");
     }
   }, [dispatch, navigate]);

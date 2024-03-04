@@ -3,19 +3,14 @@ import { Button, Container, TextField, Typography } from "@mui/material";
 import { Toast, notifyError, notifyWarn } from "../services/Toast";
 import { ItemLogin } from "../style/style";
 import User from "../types/User";
-import { useAppDispatch, useUsers } from "../redux/hooks";
-import { login } from "../redux/reducers/authSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { login, loginFromCache } from "../redux/reducers/authSlice";
 
 function Login() {
-  const users = useUsers();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   function handleClick(): void {
-    if (users.length === 0) {
-      notifyError("Email o Password errata");
-    }
-
     const email: string = (document.getElementById("email") as HTMLInputElement)
       .value;
     const password: string = (
@@ -27,17 +22,11 @@ function Login() {
       return;
     }
 
-    users.forEach((user: User) => {
-      if (user.email === email) {
-        if (user.password === "") {
-          console.log(User.encryptPassword(password));
-        } else if (User.checkPassword(password, user.password)) {
-          dispatch(login(Object.assign({}, user)));
-          navigate("/task-list");
-          return;
-        }
-      }
-    });
+    const user = new User(-1, "", email, "", password);
+    if (dispatch(login(user)) !== undefined) {
+      dispatch(loginFromCache(Object.assign({}, user)));
+      navigate("/task-list");
+    }
 
     notifyError("Email o Password errata");
   }

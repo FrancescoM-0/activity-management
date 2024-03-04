@@ -13,16 +13,17 @@ import {
 import { IPath, Paths } from "../services/Paths";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { logout, selectAuthUser } from "../redux/reducers/authSlice";
+import { useAppDispatch, useAuthUser } from "../redux/hooks";
+import { logout } from "../redux/reducers/authSlice";
 
 function NavBar() {
-  const auth = useAppSelector(selectAuthUser);
+  const auth = useAuthUser();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = useState<HTMLElement | null>(null);
 
+  //console.log(auth);
   if (auth === null) {
     return <></>;
   }

@@ -11,7 +11,7 @@ import {
   createTask,
   updateTask,
   deleteTask,
-  setTasks,
+  replaceAllTasks,
 } from "../../services/http/tasksHttp";
 import { areEqual } from "../../utils/compareArray";
 
@@ -78,14 +78,14 @@ const tasksSlice = createSlice({
       ) {
         state.future.unshift(state.tasks);
         state.tasks = state.past.pop()!;
-        setTasks(state.tasks);
+        replaceAllTasks(state.tasks);
       }
     },
     redoTasks: (state) => {
       if (state.future.length !== 0) {
         state.past.push(state.tasks);
         state.tasks = state.future.shift()!;
-        setTasks(state.tasks);
+        replaceAllTasks(state.tasks);
       }
     },
   },

@@ -19,7 +19,7 @@ class User {
     this.password = password;
   }
 
-  static encryptPassword(password: string): string {
+  /*static encryptPassword(password: string): string {
     let bcrypt = require("bcryptjs");
     let salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
@@ -28,7 +28,7 @@ class User {
   static checkPassword(plainTextPassword: string, passwordToCompare: string) {
     let bcrypt = require("bcryptjs");
     return bcrypt.compareSync(plainTextPassword, passwordToCompare);
-  }
+  }*/
 
   static generateInitialPassword(length: number): string {
     let initialPassword: string = "";

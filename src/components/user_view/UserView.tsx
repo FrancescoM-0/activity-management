@@ -28,7 +28,7 @@ function UserView() {
       auth!.name,
       auth!.email,
       auth!.role,
-      User.encryptPassword(newPassword)
+      newPassword
     );
 
     dispatch(editUser(Object.assign({}, user)));
