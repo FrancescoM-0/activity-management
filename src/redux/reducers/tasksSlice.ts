@@ -12,6 +12,7 @@ import {
   updateTask,
   deleteTask,
   replaceAllTasks,
+  fetchUserTasks,
 } from "../../services/http/tasksHttp";
 import { areEqual } from "../../utils/compareArray";
 
@@ -29,9 +30,17 @@ const initialState: ITasksState = {
 
 const fetchInitialTasks = createAsyncThunk(
   "tasks/fetchInitialTasks",
-  async () => {
-    const response = await fetchTasks();
+  async (userName: string) => {
+    let response: Task[];
+    if (userName.localeCompare("") === 0) {
+      response = await fetchTasks();
+    } else {
+      response = await fetchUserTasks(userName);
+      console.log(response);
+    }
+
     const tasks = response.map((task: Task) => Object.assign({}, task));
+    console.log(tasks);
     return tasks;
   }
 );
