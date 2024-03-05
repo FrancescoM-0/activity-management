@@ -31,6 +31,10 @@ function FetchData({ children }: FetchDataProps) {
         }
       }
 
+      //task manager
+      if (name.localeCompare("") === 0) {
+        dispatch(fetchInitialUsers());
+      }
       dispatch(fetchInitialTasks(name));
     }
   }, [authUser, dispatch]);
