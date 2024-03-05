@@ -36,11 +36,9 @@ const fetchInitialTasks = createAsyncThunk(
       response = await fetchTasks();
     } else {
       response = await fetchUserTasks(userName);
-      console.log(response);
     }
 
     const tasks = response.map((task: Task) => Object.assign({}, task));
-    console.log(tasks);
     return tasks;
   }
 );

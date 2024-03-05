@@ -3,7 +3,7 @@ import { fetchGraphql } from "./httpConst";
 
 async function loginGetUser(email: string, password: string) {
   let query = `query Login($email: String, $password: String) {
-    login(email: $email, password: $password) {id name email role password}
+    login(email: $email, password: $password) {id name email role}
   }`;
 
   let data = await fetchGraphql(query, { email: email, password: password });
@@ -12,7 +12,7 @@ async function loginGetUser(email: string, password: string) {
 
 async function fetchUsers() {
   let query = `query GetUsers {
-    getUsers{id name email role password}
+    getUsers{id name email role}
   }`;
 
   let data = await fetchGraphql(query);
@@ -54,7 +54,7 @@ async function updateUser(user: User) {
 
 async function deleteUser(userToDelete: User) {
   let query = `mutation DeleteUser($input: UserInput) {
-    deleteUser(input: $input) {id name email role password}
+    deleteUser(input: $input) {id name email role}
   }`;
 
   let data = await fetchGraphql(query, {
