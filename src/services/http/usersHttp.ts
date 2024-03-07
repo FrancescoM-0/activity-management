@@ -37,7 +37,7 @@ async function createUser(newUser: User) {
 
 async function updateUser(user: User) {
   let query = `mutation UpdateUser($input: UserInput) {
-    updateUser(input: $input) {id name email role password}
+    updateUser(input: $input)
   }`;
 
   let data = await fetchGraphql(query, {
@@ -54,7 +54,7 @@ async function updateUser(user: User) {
 
 async function deleteUser(userToDelete: User) {
   let query = `mutation DeleteUser($input: UserInput) {
-    deleteUser(input: $input) {id name email role}
+    deleteUser(input: $input)
   }`;
 
   let data = await fetchGraphql(query, {

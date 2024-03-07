@@ -40,7 +40,7 @@ async function createTask(newTask: Task) {
 
 async function updateTask(task: Task) {
   let query = `mutation UpdateTask($input: TaskInput) {
-    updateTask(input: $input) {id title description status assignedTo dueDate}
+    updateTask(input: $input)
   }`;
 
   let data = await fetchGraphql(query, {
@@ -58,7 +58,7 @@ async function updateTask(task: Task) {
 
 async function deleteTask(taskToDelete: Task) {
   let query = `mutation DeleteTask($input: TaskInput) {
-    deleteTask(input: $input) {id title description status assignedTo dueDate}
+    deleteTask(input: $input)
   }`;
 
   let data = await fetchGraphql(query, {
