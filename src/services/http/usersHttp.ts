@@ -28,6 +28,7 @@ async function fetchUsers(...fields: Array<keyof User>) {
 async function createUser(newUser: User, ...fields: Array<keyof User>) {
   let data = await fetchGraphql(CREATE_USER(...fields), {
     input: {
+      id: newUser.id,
       name: newUser.name,
       email: newUser.email,
       role: newUser.role,

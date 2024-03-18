@@ -23,6 +23,7 @@ async function fetchTasks(...fields: Array<keyof Task>) {
 async function createTask(newTask: Task, ...fields: Array<keyof Task>) {
   let data = await fetchGraphql(CREATE_TASK(...fields), {
     input: {
+      id: newTask.id,
       title: newTask.title,
       description: newTask.description,
       status: newTask.status,
