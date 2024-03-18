@@ -1,32 +1,27 @@
+import {
+  CREATE_TASK,
+  DELETE_TASK,
+  REPLACE_ALL_TASKS,
+  UPDATE_TASK,
+} from "../../apollo/mutation";
+import { GET_TASKS, GET_USER_TASKS } from "../../apollo/query";
 import Task from "../../types/Task";
 import { fetchGraphql } from "./httpConst";
 
-async function fetchUserTasks(userName: string) {
-  let query = `query GetUserTasks($userName: String) {
-    getUserTasks(userName: $userName) {
-      id title description status assignedTo dueDate
-    }
-  }`;
-
-  let data = await fetchGraphql(query, { userName: userName });
+async function fetchUserTasks(userName: string, ...fields: Array<keyof Task>) {
+  let data = await fetchGraphql(GET_USER_TASKS(...fields), {
+    userName: userName,
+  });
   return data.getUserTasks;
 }
 
-async function fetchTasks() {
-  let query = `query GetTasks {
-    getTasks{id title description status assignedTo dueDate}
-  }`;
-
-  let data = await fetchGraphql(query);
+async function fetchTasks(...fields: Array<keyof Task>) {
+  let data = await fetchGraphql(GET_TASKS(...fields), {});
   return data.getTasks;
 }
 
-async function createTask(newTask: Task) {
-  let query = `mutation CreateTask($input: TaskInput) {
-    createTask(input: $input) {id title description status assignedTo dueDate}
-  }`;
-
-  let data = await fetchGraphql(query, {
+async function createTask(newTask: Task, ...fields: Array<keyof Task>) {
+  let data = await fetchGraphql(CREATE_TASK(...fields), {
     input: {
       title: newTask.title,
       description: newTask.description,
@@ -39,11 +34,7 @@ async function createTask(newTask: Task) {
 }
 
 async function updateTask(task: Task) {
-  let query = `mutation UpdateTask($input: TaskInput) {
-    updateTask(input: $input)
-  }`;
-
-  let data = await fetchGraphql(query, {
+  let data = await fetchGraphql(UPDATE_TASK, {
     input: {
       id: task.id,
       title: task.title,
@@ -57,22 +48,14 @@ async function updateTask(task: Task) {
 }
 
 async function deleteTask(taskToDelete: Task) {
-  let query = `mutation DeleteTask($input: TaskInput) {
-    deleteTask(input: $input)
-  }`;
-
-  let data = await fetchGraphql(query, {
+  let data = await fetchGraphql(DELETE_TASK, {
     id: taskToDelete.id,
   });
   return data.deleteTask;
 }
 
 async function replaceAllTasks(tasks: Task[]) {
-  let query = `mutation ReplaceAllTasks($input: [TaskInput]!) {
-    replaceAllTasks(input: $input)
-  }`;
-
-  let data = await fetchGraphql(query, {
+  let data = await fetchGraphql(REPLACE_ALL_TASKS, {
     input: tasks,
   });
   return data.replaceAllTasks;

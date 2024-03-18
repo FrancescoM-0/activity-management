@@ -18,7 +18,7 @@ function Login() {
     }
   });
 
-  function handleClick(): void {
+  async function handleClick(): Promise<void> {
     const email: string = (document.getElementById("email") as HTMLInputElement)
       .value;
     const password: string = (
@@ -31,10 +31,9 @@ function Login() {
     }
 
     const user = new User(-1, "", email, "", password);
-    if (dispatch(login(user)) !== undefined) {
+    if ((await dispatch(login(user))).payload !== null) {
       return;
     }
-
     notifyError("Email o Password errata");
   }
 

@@ -1,16 +1,23 @@
-const ip: string = "http://127.0.0.1";
-const port: string = "4000";
+import httpConfig from "../../http-config.json";
+import { readCacheUser } from "../auth/cacheAuth";
 
-const address: string = ip + ":" + port;
-const addressGraphql: string = address + "/graphql";
+const address: string = httpConfig.ip + ":" + httpConfig.port;
+const addressGraphql: string = address + httpConfig.graphqlPath;
+
+const header = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
+const headerWithAuthorization = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+  Authorization: JSON.stringify(readCacheUser()),
+};
 
 async function fetchGraphql(query: string, variables: {} = {}) {
   const res = await fetch(addressGraphql, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
+    headers: readCacheUser() === null ? header : headerWithAuthorization,
     body: JSON.stringify({
       query,
       variables: variables,

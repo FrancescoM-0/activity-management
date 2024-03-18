@@ -33,9 +33,24 @@ const fetchInitialTasks = createAsyncThunk(
   async (userName: string) => {
     let response: Task[];
     if (userName.localeCompare("") === 0) {
-      response = await fetchTasks();
+      response = await fetchTasks(
+        "id",
+        "title",
+        "status",
+        "description",
+        "assignedTo",
+        "dueDate"
+      );
     } else {
-      response = await fetchUserTasks(userName);
+      response = await fetchUserTasks(
+        userName,
+        "id",
+        "title",
+        "status",
+        "description",
+        "assignedTo",
+        "dueDate"
+      );
     }
 
     const tasks = response.map((task: Task) => Object.assign({}, task));
@@ -52,7 +67,7 @@ const tasksSlice = createSlice({
       newTasks.push(action.payload);
 
       setPastAndFuture(state, newTasks);
-      createTask(action.payload);
+      createTask(action.payload, "id");
     },
     editTask: (state, action: PayloadAction<Task>) => {
       let newTasks: Task[] = [];

@@ -30,7 +30,13 @@ const initialState: IUsersState = {
 const fetchInitialUsers = createAsyncThunk(
   "users/fetchInitialUsers",
   async () => {
-    const response = await fetchUsers();
+    const response = await fetchUsers(
+      "id",
+      "email",
+      "name",
+      "role",
+      "password"
+    );
     const users = response.map((user: User) => Object.assign({}, user));
     return users;
   }
@@ -45,7 +51,7 @@ const usersSlice = createSlice({
       newUsers.push(action.payload);
 
       setPastAndFuture(state, newUsers);
-      createUser(action.payload);
+      createUser(action.payload, "id");
     },
     editUser: (state, action: PayloadAction<User>) => {
       let newUsers: User[] = [];

@@ -13,7 +13,20 @@ const initialState: IAuthUserState = {
 };
 
 const login = createAsyncThunk("auth/login", async (user: User) => {
-  return Object.assign({}, await loginGetUser(user.email, user.password));
+  let res = Object.assign(
+    {},
+    await loginGetUser(
+      user.email,
+      user.password,
+      "id",
+      "email",
+      "name",
+      "password",
+      "role"
+    )
+  );
+  if (res.id) return res;
+  return null;
 });
 
 const authSlice = createSlice({
